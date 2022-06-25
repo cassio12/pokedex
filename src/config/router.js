@@ -13,7 +13,7 @@ function Routers() {
                     <NavLink to='/'>Inicío</NavLink>
                 </li>
                 <li>
-                    <NavLink to='/adicionar'>Adicionar Usuários</NavLink>
+                    <NavLink to='/adicionar'>Adicionar Pokemon</NavLink>
                 </li>
                 </ul>
             </nav>

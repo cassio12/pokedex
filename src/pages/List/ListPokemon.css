@@ -1,0 +1,13 @@
+.pokedex {
+    height: 80vh;
+    background-color: #b71c1c;
+    overflow: auto;
+}
+
+.box-card-list {
+    display: grid;
+    grid-gap: 10px;
+    justify-content: center;
+    grid-template-columns: 40% 40%; 
+    margin-top: 1rem;
+}
