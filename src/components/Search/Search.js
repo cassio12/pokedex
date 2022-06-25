@@ -10,9 +10,7 @@ function Search({
     onCleanSearch,
     pokedex,
 }) {
-
-    // console.log(pokedex.searchValue)
-
+    
     return (
         <div className="box-search-bar">
             <input className="search-bar-input" onChange={(e) => onValue({...pokedex, searchValue: e.target.value})} type="text" value={pokedex.searchValue}/>

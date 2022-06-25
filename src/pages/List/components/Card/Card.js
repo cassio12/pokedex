@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 // import { faHeart } from "@fortawesome/free-regular-svg-icons";
@@ -12,21 +12,16 @@ function Card({
     pokedex,
     onFavorite,
 }) {
+    const [isFavorite, setIsFavorite] = useState(false)
 
-    const showFavorite = (str, index) => {
-        let heart = document.getElementById(`heart-${index}`)
-        if(str === 'dentro'){
-            heart.classList.remove('card-favorite-icon-out')
-            heart.classList.add('card-favorite-icon-in')
-        }
-        else {
-            heart.classList.add('card-favorite-icon-out')
-            heart.classList.remove('card-favorite-icon-in')
-        }
-        console.log(heart)
-    }
+    useEffect(() => {
+        pokedex.favorites && pokedex.favorites?.map((item) => {
+            if (item === index) {
+                setIsFavorite(true);
+            }
+        })
+    }, [pokedex.favorites])
 
-    // console.log(item)
     return (
         <div key={index} className="box-card">
             <div >
@@ -35,8 +30,11 @@ function Card({
                 <p>Registro nacioal {item.national_number}</p>
                 <p>Tipos: {item.type.join(', ')}</p>
             </div>
-            <div className="box-favorite-icon" onMouseEnter={() => showFavorite('dentro', index)} onMouseOut={() => showFavorite('fora', index)}>
-                {<FontAwesomeIcon id={`heart-${index}`} className={`${pokedex.favorites.id} === ${index} ? isFavorite : card-favorite-icon-out`} icon={faHeart} onClick={() => onFavorite(index)}/>  }
+            <div className="box-favorite-icon">
+                {isFavorite === true ? 
+                <FontAwesomeIcon onClick={() => onFavorite(index, isFavorite, setIsFavorite(!isFavorite))} id={`heart-${index}`} className='isFavorite' icon={faHeart} /> : 
+                <FontAwesomeIcon onClick={() => onFavorite(index, isFavorite, setIsFavorite(!isFavorite))} id={`heart-${index}`} className='card-favorite-icon-out' icon={faHeart} />
+                }
             </div>
         </div>
     );

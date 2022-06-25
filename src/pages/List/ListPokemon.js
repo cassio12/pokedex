@@ -7,7 +7,7 @@ import Card from "./components/Card/Card";
 const INITIAL_STATE = {
     pokeList: [],
     searchValue: '',
-    favorites: [],
+    favorites: [0, 2],
     isActive: false,
     itensPerPage: 10,
     currentPage: 0,
@@ -31,10 +31,19 @@ function ListPokemons() {
         })
     }
 
-    console.log(endIndex)
-
     const searchPokemon = () => {
 
+    }
+
+    const favoritePokemon = (id, isFavorite) => {
+        if(isFavorite === false){
+            console.log(true)
+            setPokedex({...pokedex, favorites: [...pokedex.favorites, id]})
+        }
+        else {
+            let tempFav = pokedex.favorites.filter(item => item !== id)
+            setPokedex({...pokedex, favorites: tempFav})
+        }
     }
 
     const resetSearch = () => {
@@ -74,41 +83,9 @@ function ListPokemons() {
                     <option value={50}>50</option>
                     <option value={100}>100</option>
                 </select>
-                {/* <div onClick={() =>  setPokedex({...pokedex, isActive: !pokedex.isActive})}> 
-                    {pokedex.itensPerPage} {pokedex.isActive ? <p size={25} color={'#ccc'}>A</p> : <p size={25} color={'#ccc'}>v</p>}
-                </div>
-                {pokedex.isActive && (
-                    <div >
-                        <div onClick={(e) => {
-                            setPokedex({...pokedex, itensPerPage: Number(e.target.textContent)})
-                            setPokedex({...pokedex, isActive: false})
-                        }}>
-                            <span  id="dropdown-item-range-10"> 10 </span>
-                        </div>
-                        <deleteVideo onClick={(e) => {
-                            setPokedex({...pokedex, itensPerPage: Number(e.target.textContent)})
-                            setPokedex({...pokedex, isActive: false})
-                        }}>
-                            <span   id="dropdown-item-range-25" > 25 </span>
-                        </deleteVideo>
-                        <div onClick={(e) => {
-                            setPokedex({...pokedex, itensPerPage: Number(e.target.textContent)})
-                            setPokedex({...pokedex, isActive: false})
-                        }}>
-                            <span id="dropdown-item-range-50"> 50 </span>
-                        </div>
-
-                        <div onClick={(e) => {
-                            setPokedex({...pokedex, itensPerPage: Number(e.target.textContent)})
-                            setPokedex({...pokedex, isActive: false})
-                        }}>
-                            <span   id="dropdown-item-range-100"> 100 </span>
-                        </div>
-                    </div>
-                )} */}
             </div>
             <div className="box-card-list">
-                {currentPageItens.map((item, index) => <Card item={item} index={index} pokedex={pokedex}/>)}
+                {currentPageItens.map((item, index) => <Card item={item} index={index} pokedex={pokedex} onFavorite={favoritePokemon}/>)}
             </div>
         </div>
     );

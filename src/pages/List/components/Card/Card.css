@@ -14,14 +14,17 @@
 }
 
 .card-favorite-icon-out {
-    display: none;
+    opacity: 0;
 }
-
-.card-favorite-icon-in {
-    display: block;
+.card-favorite-icon-out:hover {
+    opacity: 1;
     cursor: pointer;
     align-self: flex-end;
 }
-/* .card-favorite-icon:hover {
 
-} */
+.isFavorite {
+    color: red;
+    opacity: 1;
+    cursor: pointer;
+    align-self: flex-end;
+}
