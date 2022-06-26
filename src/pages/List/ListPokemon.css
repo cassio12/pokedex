@@ -6,6 +6,20 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    padding-bottom: 5rem;
+}
+
+.pokedex::-webkit-scrollbar-track {
+    background-color: #F4F4F4;
+    border-radius: 5px;
+}
+.pokedex::-webkit-scrollbar {
+    width: 10px;
+    background: #F4F4F4;
+}
+.pokedex::-webkit-scrollbar-thumb {
+    background: #00affe;;
+    border-radius: 5px;
 }
 
 .title-pokedex {

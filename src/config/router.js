@@ -1,11 +1,12 @@
 import React from "react";
 import List from "../pages/List/ListPokemon"
 import { BrowserRouter as Router, NavLink, Routes, Route, Link } from 'react-router-dom'
+import "../App.css"
 
 function Routers() {
     return (
         <Router>
-        <div className="App">
+        <div className="route">
             <header>
             <nav>
                 <ul>
@@ -13,7 +14,7 @@ function Routers() {
                     <NavLink to='/'>Inicío</NavLink>
                 </li>
                 <li>
-                    <NavLink to='/adicionar'>Adicionar Pokemon</NavLink>
+                    <NavLink to='/'>Adicionar Pokemon</NavLink>
                 </li>
                 </ul>
             </nav>

@@ -3,6 +3,7 @@ import Search from "../../components/Search/Search";
 import "./ListPokemon.css"
 import axios from 'axios'
 import Card from "./components/Card/Card";
+import Types from "../../components/Types/Types";
 
 const INITIAL_STATE = {
     pokeList: [],
@@ -15,7 +16,7 @@ const INITIAL_STATE = {
 
 function ListPokemons() {
     const [pokedex, setPokedex] = useState(INITIAL_STATE);
-
+    
     const pages = Math.ceil(pokedex.pokeList.length / pokedex.itensPerPage);
     const startIndex = pokedex.currentPage * pokedex.itensPerPage;
     const endIndex = startIndex + pokedex.itensPerPage;
@@ -32,7 +33,20 @@ function ListPokemons() {
     }
 
     const searchPokemon = () => {
-
+        if(pokedex.searchValue){
+            let tempValue = pokedex.pokeList.filter(item => {
+                if(item.name.toLowerCase().includes(pokedex.searchValue.toLowerCase())){
+                    return item.name
+                }
+                else {
+                    return item.national_number.includes(pokedex.searchValue)
+                }
+            })
+            setPokedex({...pokedex, pokeList: tempValue})
+        }
+        else {
+            getAllPokemons()
+        }
     }
 
     const favoritePokemon = (id, isFavorite) => {
@@ -52,7 +66,7 @@ function ListPokemons() {
 
     useEffect(()=>{
         getAllPokemons()
-    },[])
+    },[pokedex.searchValue])
 
     return (
         <div className="pokedex">
@@ -76,13 +90,16 @@ function ListPokemons() {
                 })}
             </div>
             <div>
-                <select value={pokedex.itensPerPage} onChange={(e) => setPokedex({...pokedex, itensPerPage: Number(e.target.value)})}>
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={25}>25</option>
-                    <option value={50}>50</option>
-                    <option value={100}>100</option>
-                </select>
+                <div>
+                    <select value={pokedex.itensPerPage} onChange={(e) => setPokedex({...pokedex, itensPerPage: Number(e.target.value)})}>
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                    </select>
+                </div>
+                <Types/>
             </div>
             <div className="box-card-list">
                 {currentPageItens.map((item, index) => <Card item={item} index={index} pokedex={pokedex} onFavorite={favoritePokemon}/>)}
