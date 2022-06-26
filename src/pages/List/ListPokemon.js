@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Search from "../../components/Search/Search";
 import "./ListPokemon.css"
 import axios from 'axios'
@@ -7,25 +9,53 @@ import Types from "../../components/Types/Types";
 
 const INITIAL_STATE = {
     pokeList: [],
+    filterList: [],
     searchValue: '',
-    favorites: [0, 2],
+    favorites: [
+        {
+            attack: 82,
+            defense: 83,
+            evolution: null,
+            hp: 80,
+            id: 4,
+            name: "Venusaur",
+            national_number: "003",
+            sp_atk: 100,
+            sp_def: 100,
+            speed: 80,
+            sprites: {
+                normal: 'https://img.pokemondb.net/sprites/omega-ruby-alpha-sapphire/dex/normal/venusaur.png', 
+                large: 'https://img.pokemondb.net/artwork/venusaur.jpg', 
+                animated: 'https://img.pokemondb.net/sprites/black-white/anim/normal/venusaur.gif'
+            },
+            total: 525,
+            type: ['Grass', 'Poison']
+        },
+    ],
     isActive: false,
-    itensPerPage: 10,
+    itensPerPage: 50,
     currentPage: 0,
 }
 
 function ListPokemons() {
     const [pokedex, setPokedex] = useState(INITIAL_STATE);
-    
-    const pages = Math.ceil(pokedex.pokeList.length / pokedex.itensPerPage);
+
+    const pages = Math.ceil(pokedex.filterList.length / pokedex.itensPerPage);
     const startIndex = pokedex.currentPage * pokedex.itensPerPage;
     const endIndex = startIndex + pokedex.itensPerPage;
-    const currentPageItens = pokedex.pokeList.slice(startIndex, endIndex);
+    const currentPageItens = pokedex.filterList.slice(startIndex, endIndex);
 
     const getAllPokemons = async() => {
         await axios.get(`https://unpkg.com/pokemons@1.1.0/pokemons.json`)
         .then((resp) => {
-            setPokedex({...pokedex, pokeList: resp.data.results})
+            let data = resp.data.results
+            let tempID;
+            let tempListPokemons = []
+            for(let i = 0; i < data.length; i++){
+                tempID = {id: i+1} 
+                tempListPokemons.push(Object.assign(data[i], tempID))
+            }
+            setPokedex({...pokedex, pokeList: tempListPokemons})
           })
           .catch((error) => {
           return error
@@ -51,22 +81,47 @@ function ListPokemons() {
 
     const favoritePokemon = (id, isFavorite) => {
         if(isFavorite === false){
-            console.log(true)
-            setPokedex({...pokedex, favorites: [...pokedex.favorites, id]})
+            pokedex.pokeList.filter(item => {
+                if(id === item.id){
+                    setPokedex({...pokedex, favorites: [...pokedex.favorites, item]})
+                }
+            })
         }
         else {
-            let tempFav = pokedex.favorites.filter(item => item !== id)
+            let tempFav = pokedex.favorites.filter(item => item.id !== id)
             setPokedex({...pokedex, favorites: tempFav})
         }
+    }
+
+    const FilterFavorits = () => {
+        setPokedex({...pokedex, filterList: pokedex.favorites})
     }
 
     const resetSearch = () => {
         setPokedex({...pokedex, searchValue:''})
     }
 
+    const filterType = (type) => {
+        if(type !== 'Todos'){
+            let tempValue = pokedex.pokeList.filter(item => {
+                return (item.type.includes(type)) 
+            })
+            setPokedex({...pokedex, filterList: tempValue})
+        }
+        if(type === 'Todos'){
+            setPokedex({...pokedex, filterList: pokedex.pokeList})
+        }
+    }
+
+    // console.log(pokedex.pokeList)
+
     useEffect(()=>{
         getAllPokemons()
     },[pokedex.searchValue])
+
+    useEffect(()=>{
+        setPokedex({...pokedex, filterList: pokedex.pokeList})
+    },[pokedex.pokeList])
 
     return (
         <div className="pokedex">
@@ -77,7 +132,7 @@ function ListPokemons() {
             onSearch={searchPokemon}
             onCleanSearch={resetSearch}
             />
-            <div>
+            <div style={{marginTop:'1rem'}}>
                 {Array.from(Array(pages), (item, index) => {
                     return (
                         <button 
@@ -91,6 +146,7 @@ function ListPokemons() {
             </div>
             <div>
                 <div>
+                    <button onClick={FilterFavorits}>Favoritos <FontAwesomeIcon style={{color:'red'}} icon={faHeart}/></button>
                     <select value={pokedex.itensPerPage} onChange={(e) => setPokedex({...pokedex, itensPerPage: Number(e.target.value)})}>
                         <option value={5}>5</option>
                         <option value={10}>10</option>
@@ -99,10 +155,10 @@ function ListPokemons() {
                         <option value={100}>100</option>
                     </select>
                 </div>
-                <Types/>
+                <Types onFilterType={filterType}/>
             </div>
             <div className="box-card-list">
-                {currentPageItens.map((item, index) => <Card item={item} index={index} pokedex={pokedex} onFavorite={favoritePokemon}/>)}
+                {currentPageItens.map((item, index) => <Card item={item} id={item.id} favorites={pokedex.favorites.map(item => item.id)} onFavorite={favoritePokemon}/>)}
             </div>
         </div>
     );
