@@ -11,10 +11,10 @@ function Routers() {
             <nav>
                 <ul>
                 <li>
-                    <NavLink to='/'>Inicío</NavLink>
+                    <NavLink to='/'>Home</NavLink>
                 </li>
                 <li>
-                    <NavLink to='/'>Adicionar Pokemon</NavLink>
+                    <NavLink to='/'>Add Pokemon</NavLink>
                 </li>
                 </ul>
             </nav>

@@ -26,7 +26,7 @@ function Card({
             <div >
                 <img src={item.sprites.normal}/>
                 <p>Nome: {item.name}</p>
-                <p>Registro nacioal {item.national_number}</p>
+                <p>Registro nacional {item.national_number}</p>
                 <p>Tipos: {item.type?.join(', ')}</p>
             </div>
             <div id={id} className="box-favorite-icon">

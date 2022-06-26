@@ -1,7 +1,7 @@
 .pokedex {
     width: 100%;
     height: 80vh;
-    background-color: #b71c1c;
+    background-color: #495098;
     overflow: auto;
     display: flex;
     align-items: center;
@@ -31,8 +31,16 @@
     display: grid;
     grid-gap: 10px;
     justify-content: center;
-    grid-template-columns: 26% 26%;
+    grid-template-columns: 23% 23% 23% 23%;
     margin-top: 1rem;
+}
+
+.currentPage {
+    background-color: #00affe;
+}
+
+.unCurrentPage {
+    background-color: #F7F7F7;
 }
 
 p {

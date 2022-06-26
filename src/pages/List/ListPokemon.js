@@ -6,6 +6,8 @@ import "./ListPokemon.css"
 import axios from 'axios'
 import Card from "./components/Card/Card";
 import Types from "../../components/Types/Types";
+import OrderFilter from "../../components/Order/OrderFilter";
+import Pagination from "../../components/Pagination/Pagination";
 
 const INITIAL_STATE = {
     pokeList: [],
@@ -35,6 +37,7 @@ const INITIAL_STATE = {
     isActive: false,
     itensPerPage: 50,
     currentPage: 0,
+    order: 'ascending',
 }
 
 function ListPokemons() {
@@ -102,26 +105,47 @@ function ListPokemons() {
     }
 
     const filterType = (type) => {
-        if(type !== 'Todos'){
+        if(type !== 'All'){
             let tempValue = pokedex.pokeList.filter(item => {
                 return (item.type.includes(type)) 
             })
             setPokedex({...pokedex, filterList: tempValue})
         }
-        if(type === 'Todos'){
+        if(type === 'All'){
             setPokedex({...pokedex, filterList: pokedex.pokeList})
         }
     }
 
-    // console.log(pokedex.pokeList)
+    const filterOrder = () => {
+        let tempOrder = pokedex.pokeList.sort((a, b) => {
+            if(pokedex.order === 'ascending') return a.national_number - b.national_number;
+            if(pokedex.order === 'descending') return b.national_number - a.national_number;
+        })
+        setPokedex({...pokedex, filterList:tempOrder})
+    }
 
-    useEffect(()=>{
+    const selectCurrent = (target) => {
+        if(pokedex.currentPage === target.value){
+            return target.classList.add('currentPage')
+        }
+    }
+
+    // console.log(pokedex.order)
+    useEffect(() => {
+        filterOrder()
+    },[pokedex.order])
+
+    useEffect(() => {
         getAllPokemons()
     },[pokedex.searchValue])
 
-    useEffect(()=>{
+    useEffect(() => {
         setPokedex({...pokedex, filterList: pokedex.pokeList})
     },[pokedex.pokeList])
+
+    useEffect(() => {
+        setPokedex({...pokedex, currentPage: 0})
+    }, [pokedex.itensPerPage]);
 
     return (
         <div className="pokedex">
@@ -132,21 +156,11 @@ function ListPokemons() {
             onSearch={searchPokemon}
             onCleanSearch={resetSearch}
             />
-            <div style={{marginTop:'1rem'}}>
-                {Array.from(Array(pages), (item, index) => {
-                    return (
-                        <button 
-                            value={index} 
-                            onClick={(e) => setPokedex({...pokedex, currentPage: e.target.value})}
-                            >
-                            {index+1}
-                        </button>
-                    )
-                })}
-            </div>
+            <Pagination pokedex={pokedex} onPokedex={setPokedex} pages={pages}/>
             <div>
                 <div>
-                    <button onClick={FilterFavorits}>Favoritos <FontAwesomeIcon style={{color:'red'}} icon={faHeart}/></button>
+                    <OrderFilter pokedex={pokedex} onPokedex={setPokedex}/>
+                    <button onClick={FilterFavorits}>Favorites <FontAwesomeIcon style={{color:'red'}} icon={faHeart}/></button>
                     <select value={pokedex.itensPerPage} onChange={(e) => setPokedex({...pokedex, itensPerPage: Number(e.target.value)})}>
                         <option value={5}>5</option>
                         <option value={10}>10</option>
