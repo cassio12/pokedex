@@ -35,12 +35,20 @@
     margin-top: 1rem;
 }
 
-.currentPage {
-    background-color: #00affe;
+.opacity_currentPage {
+    opacity: .5;
 }
 
-.unCurrentPage {
-    background-color: #F7F7F7;
+.currentPage {
+    width: 30px;
+    height: 20px;
+    border: none;
+    text-align: center;
+    background-color: #f7f7f7;
+    padding: 3px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 50%;
 }
 
 p {

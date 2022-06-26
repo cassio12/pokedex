@@ -8,6 +8,7 @@ import Card from "./components/Card/Card";
 import Types from "../../components/Types/Types";
 import OrderFilter from "../../components/Order/OrderFilter";
 import Pagination from "../../components/Pagination/Pagination";
+import DropDownPages from "../../components/DropDownPages/DropDownPages";
 
 const INITIAL_STATE = {
     pokeList: [],
@@ -49,7 +50,7 @@ function ListPokemons() {
     const currentPageItens = pokedex.filterList.slice(startIndex, endIndex);
 
     const getAllPokemons = async() => {
-        await axios.get(`https://unpkg.com/pokemons@1.1.0/pokemons.json`)
+        await axios.get(`${process.env.REACT_APP_LINK_API}pokemons.json`)
         .then((resp) => {
             let data = resp.data.results
             let tempID;
@@ -124,13 +125,6 @@ function ListPokemons() {
         setPokedex({...pokedex, filterList:tempOrder})
     }
 
-    const selectCurrent = (target) => {
-        if(pokedex.currentPage === target.value){
-            return target.classList.add('currentPage')
-        }
-    }
-
-    // console.log(pokedex.order)
     useEffect(() => {
         filterOrder()
     },[pokedex.order])
@@ -139,13 +133,11 @@ function ListPokemons() {
         getAllPokemons()
     },[pokedex.searchValue])
 
+    console.log(process.env.REACT_APP_LINK_API)
+
     useEffect(() => {
         setPokedex({...pokedex, filterList: pokedex.pokeList})
     },[pokedex.pokeList])
-
-    useEffect(() => {
-        setPokedex({...pokedex, currentPage: 0})
-    }, [pokedex.itensPerPage]);
 
     return (
         <div className="pokedex">
@@ -159,15 +151,9 @@ function ListPokemons() {
             <Pagination pokedex={pokedex} onPokedex={setPokedex} pages={pages}/>
             <div>
                 <div>
-                    <OrderFilter pokedex={pokedex} onPokedex={setPokedex}/>
                     <button onClick={FilterFavorits}>Favorites <FontAwesomeIcon style={{color:'red'}} icon={faHeart}/></button>
-                    <select value={pokedex.itensPerPage} onChange={(e) => setPokedex({...pokedex, itensPerPage: Number(e.target.value)})}>
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={25}>25</option>
-                        <option value={50}>50</option>
-                        <option value={100}>100</option>
-                    </select>
+                    <OrderFilter pokedex={pokedex} onPokedex={setPokedex}/>
+                    <DropDownPages pokedex={pokedex} onPokedex={setPokedex}/>
                 </div>
                 <Types onFilterType={filterType}/>
             </div>
