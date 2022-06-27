@@ -14,12 +14,14 @@ function Card({
     const [isFavorite, setIsFavorite] = useState(false)
 
     useEffect(() => {
-        favorites && favorites?.map((item) => {
-            if (item === id) {
+        favorites.favorites && favorites.favorites?.map((item) => {
+            if (item.id === id) {
                 setIsFavorite(true);
+                console.log(favorites.currentPage)
             }
         })
-    }, [favorites])
+    }, [favorites.currentPage])
+    
 
     return (
         <div key={id} className="box-card">

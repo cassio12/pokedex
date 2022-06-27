@@ -21,6 +21,7 @@ const INITIAL_STATE = {
             evolution: null,
             hp: 80,
             id: 4,
+            isFavorite: true,
             name: "Venusaur",
             national_number: "003",
             sp_atk: 100,
@@ -133,11 +134,13 @@ function ListPokemons() {
         getAllPokemons()
     },[pokedex.searchValue])
 
-    console.log(process.env.REACT_APP_LINK_API)
-
     useEffect(() => {
         setPokedex({...pokedex, filterList: pokedex.pokeList})
     },[pokedex.pokeList])
+
+    useEffect(() => {
+        setPokedex({...pokedex, currentPage: 0})
+    },[pokedex.itensPerPage, pokedex.filterList])
 
     return (
         <div className="pokedex">
@@ -158,7 +161,7 @@ function ListPokemons() {
                 <Types onFilterType={filterType}/>
             </div>
             <div className="box-card-list">
-                {currentPageItens.map((item, index) => <Card item={item} id={item.id} favorites={pokedex.favorites.map(item => item.id)} onFavorite={favoritePokemon}/>)}
+                {currentPageItens.map((item, index) => <Card item={item} id={item.id} favorites={pokedex} onFavorite={favoritePokemon}/>)}
             </div>
         </div>
     );
