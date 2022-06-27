@@ -50,7 +50,7 @@ function ListPokemons() {
     const currentPageItens = pokedex.filterList.slice(startIndex, endIndex);
 
     const getAllPokemons = async() => {
-        await axios.get(`${process.env.REACT_APP_LINK_API}/pokemons.json`)
+        await axios.get(`${process.env.REACT_APP_LINK_API}pokemons.json`)
         .then((resp) => {
             let data = resp.data.results
             let tempID;
