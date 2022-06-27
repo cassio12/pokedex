@@ -7,6 +7,17 @@
     justify-content: space-between;
 }
 
+@media (max-width: 1324px) {
+    .box-search-bar {
+        width: 43%;
+        background-color: #fff;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
 .search-bar-input {
     font-size: 1.4rem;
     outline: none;
